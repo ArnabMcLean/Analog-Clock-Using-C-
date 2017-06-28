@@ -1,0 +1,174 @@
+#include<iostream.h>
+#include<conio.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<graphics.h>
+#include<math.h>
+#include<dos.h>
+
+void drawclock();
+void drawclogic();
+void usecolor();
+void main()
+{
+clrscr();
+int gdriver=DETECT ,gmode;
+initgraph(&gdriver,&gmode,"C:\\TC\\BGI");
+
+cleardevice();
+
+usecolor();	/* Called in usecolor() for border color*/
+drawclock();
+drawclogic();
+
+cleardevice();
+getch();
+closegraph();
+}
+
+
+void drawclock()	/*Draw clock steps method */
+{
+
+rectangle(10,10,600,470);	/*SIDE BORDER*/
+rectangle(15,15,595,465);
+
+/*CLOCK BOX*/ 
+rectangle(145,65,500,415); 	/*Main Clock Border*/
+rectangle(141,61,504,419);
+
+/*CLOCK CIRCLES*/
+setbkcolor(0);
+
+setcolor(4);       /*RED - Mid Circle*/
+circle(320,240,5);
+
+setcolor(4);     
+circle(320,240,150);  /*Outer Circles*/
+circle(320,240,158);
+
+/*CLOCK NUMBERS*/
+setcolor(14);
+outtextxy(314,98,"12");
+outtextxy(384,114,"1");
+outtextxy(434,163,"2");
+outtextxy(454,230,"3");
+outtextxy(317,369,"6");
+outtextxy(177,230,"9");
+outtextxy(436,300,"4");
+outtextxy(195,302,"8");
+outtextxy(195,163,"10");
+outtextxy(244,112,"11");
+outtextxy(388,353,"5");
+outtextxy(248,353,"7");
+}
+
+
+/*CALCULATION Logic of draw clock*/
+
+void drawclogic()
+{
+int x,y;
+int q,w;
+int ta,d;
+int count=0;
+struct  time t1;
+gettime(&t1);
+
+float asec;
+float amin;
+float ahr;
+
+while(!kbhit())
+{
+setcolor(count);
+
+	gettime(&t1);
+	gotoxy(5,5);
+	asec=4.712389+t1.ti_sec*.1047198;
+	amin=4.712389+t1.ti_min*.1047198;
+	ahr=4.712389+t1.ti_hour*5*.1047198 ;
+	if(t1.ti_min>=12&&t1.ti_min<24)
+	{
+	ahr=ahr+2*.1047198;
+	}
+	if(t1.ti_min>=24&&t1.ti_min<36)
+	{
+	ahr=ahr+(3*.1047198);
+	}
+	if(t1.ti_min>=36&&t1.ti_min<48)
+	{
+	ahr=ahr+(4*.1047198);
+	}
+	if(t1.ti_min>=48&&t1.ti_min<60)
+	{
+	ahr=ahr+(5*.1047198);
+	}
+
+setlinestyle(0,0,0);
+setcolor(0);
+line(320,240,x,y);
+line(320,240,q,w);
+line(320,240,ta,d);
+
+x=320+140*cos(asec);
+y=240+140*sin(asec);
+q=320+120*cos(amin);
+w=240+120*sin(amin);
+ta=320+80*cos(ahr);
+d=240+80*sin(ahr);
+
+setcolor(10);
+line(320,240,x,y);
+
+setcolor(9);
+line(320,240,q,w);
+
+setcolor(4);
+line(320,240,ta,d);
+asec+=.1047198;
+delay(1000);
+count++;
+}
+}
+
+void usecolor()
+{
+setbkcolor(0);
+int usecolor,ch;
+do
+{
+outtextxy(25,260," Colour Menu");
+outtextxy(25,280,"1: White");
+outtextxy(25,300,"2: BLUE");
+cin>>ch;
+switch(ch)
+{
+case 1:setcolor(15); /*White*/
+setcolor(15);
+
+rectangle(10,10,600,470);	/*SIDE BORDER*/
+rectangle(15,15,595,465);
+rectangle(145,65,500,415); /*Main Clock Border*/
+rectangle(141,61,504,419);
+
+drawclock();
+drawclogic();
+break;
+
+case 2:setcolor(25); /*BLUE*/
+setcolor(25);
+
+rectangle(10,10,600,470);	/*SIDE BORDER*/
+rectangle(15,15,595,465);
+rectangle(145,65,500,415); /*Main Clock Border*/
+rectangle(141,61,504,419);
+
+
+drawclock();
+drawclogic();
+break;
+}
+}
+while(ch!=2);
+}
